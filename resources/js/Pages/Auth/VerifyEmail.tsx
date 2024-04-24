@@ -1,53 +1,87 @@
-import React, { useState } from 'react';
+import { useState } from 'react';
+import _ from 'lodash';
 import { route } from 'ziggy-js';
-import { Link, useForm } from '@inertiajs/react';
-import { Alert, Collapse, Typography, Paper, Button } from '@mui/material';
-import { SpaceBetween } from '@/src/auth/AuthComponents';
-import Layout from '@/src/auth/Layout';
+import { Form } from 'react-final-form';
+import { useTranslation } from 'react-i18next';
+import { Link, router } from '@inertiajs/react';
+import { Alert, Collapse, Typography, Button, Grid } from '@mui/material';
+import Layout from '@/src/Layouts/AuthLayout';
 
-export default function VerifyEmail({ status }: { status: string }) {
-  const { post, processing } = useForm();
+export default function VerifyEmail() {
+  const { t } = useTranslation();
   const [openAlerts, setOpenAlerts] = useState(false);
-
-  const submit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    post(route('verification.send'), {
-      onFinish: () => setOpenAlerts(true),
-    });
-  };
 
   return (
     <Layout>
-      <Paper sx={{ width: '500px', p: 4 }}>
-        <Typography variant="subtitle1">
-          Thanks for signing up! Before getting started, could you verify your
-          email address by clicking on the link we just emailed to you? If you
-          didnt receive the email, we will gladly send you another.
-        </Typography>
-        {status === 'verification-link-sent' && (
-          <Collapse in={openAlerts} className="alert">
-            <Alert onClose={() => setOpenAlerts(false)}>
-              A new verification link has been sent to the email address you
-              provided during registration.
-            </Alert>
-          </Collapse>
+      <div className="auth-form-content">
+        {openAlerts && (
+          <>
+            <Collapse in={openAlerts} className="alert">
+              <Alert onClose={() => setOpenAlerts(false)}>
+                {t(
+                  'A new verification link has been sent to the email address you provided during registration.',
+                )}
+              </Alert>
+            </Collapse>
+            <div className="spacing" />
+          </>
         )}
-        <form onSubmit={submit}>
-          <SpaceBetween>
+        <Typography variant="subtitle1">
+          {t(
+            'Thanks for signing up! Before getting started, could you verify your email address by clicking on the link we just emailed to you? If you didnt receive the email, we will gladly send you another.',
+          )}
+        </Typography>
+        <div className="spacing" />
+        <Grid container>
+          <Grid item>
+            <Form
+              subscription={{ submitting: true }}
+              onSubmit={() =>
+                new Promise<void>((resolve) =>
+                  router.post(
+                    route('verification.send'),
+                    {},
+                    {
+                      onFinish: () => resolve(),
+                      onSuccess: (page) => {
+                        if (
+                          (_.get(page, 'props.status', '') as string) ===
+                          'verification-link-sent'
+                        ) {
+                          setOpenAlerts(true);
+                        }
+                      },
+                    },
+                  ),
+                )
+              }
+              render={({ handleSubmit, submitting }) => (
+                <form onSubmit={handleSubmit}>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    color="secondary"
+                    disabled={submitting}
+                  >
+                    Resend Verification Email
+                  </Button>
+                </form>
+              )}
+            />
+          </Grid>
+          <Grid flex={1} />
+          <Grid item>
             <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              disabled={processing}
+              color="inherit"
+              LinkComponent={Link}
+              href={route('logout')}
+              {...{ method: 'post' }}
             >
-              Resend Verification Email
+              {t('Log Out')}
             </Button>
-            <Link href={route('logout')} method="post" as="button">
-              Log Out
-            </Link>
-          </SpaceBetween>
-        </form>
-      </Paper>
+          </Grid>
+        </Grid>
+      </div>
     </Layout>
   );
 }

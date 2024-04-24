@@ -1,19 +1,22 @@
-import React, { useState, useEffect } from 'react';
 import { route } from 'ziggy-js';
+import { Link, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
-import { useForm } from '@inertiajs/react';
-import { Box, InputAdornment, Button } from '@mui/material';
+import { Form, Field } from 'react-final-form';
+import { FieldSubscription } from 'final-form';
+import {
+  InputAdornment,
+  Button,
+  Grid,
+  Typography,
+  Collapse,
+  Alert,
+} from '@mui/material';
 import LockResetIcon from '@mui/icons-material/LockReset';
 import VpnKeyIcon from '@mui/icons-material/VpnKey';
 import LockIcon from '@mui/icons-material/Lock';
 import TextFieldPassword from '@/src/lib/piwi/core/TextFieldPassword';
-import {
-  Spacing,
-  FormPaper,
-  SpaceBetween,
-  ErrorsAlert,
-} from '../../src/auth/AuthComponents';
-import Layout from '../../src/auth/Layout';
+import { useErrors } from '@/hooks';
+import Layout from '@/src/Layouts/AuthLayout';
 
 export default function ResetPassword({
   email,
@@ -22,87 +25,101 @@ export default function ResetPassword({
   email: string;
   token: string;
 }) {
-  const { t }: { t: (arg: string) => string } = useTranslation();
-  const [openAlerts, setOpenAlerts] = useState(false);
-  const { data, setData, post, processing, errors, reset } =
-    useForm<ResetPasswordForm>({
-      token,
-      email,
-      password: '',
-      password_confirmation: '',
-    });
-
-  useEffect(() => () => reset('password', 'password_confirmation'), []);
-
-  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setData(ev.target.name as keyof ResetPasswordForm, ev.target.value);
-  };
+  const { t } = useTranslation();
+  const [fuckErrors, onChangeDecorator, removeError] = useErrors();
+  const subscription: FieldSubscription = { value: true, submitting: true };
 
   return (
     <Layout>
-      <FormPaper label={t('Reset Password')}>
-        <ErrorsAlert
-          openAlerts={openAlerts}
-          errors={errors}
-          onClose={() => setOpenAlerts(false)}
-        />
-        <form
-          onSubmit={(ev) => {
-            ev.preventDefault();
-            post(route('password.update'), {
-              onFinish: () => setOpenAlerts(true),
-            });
-          }}
-        >
-          <input type="hidden" name="email" value={data.email} />
-          <TextFieldPassword
-            id="signup-password"
-            name="password"
-            label={t('Password')}
-            value={data.password}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <VpnKeyIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            color="secondary"
-          />
-          <Spacing />
-          <TextFieldPassword
-            id="signup-verify-password"
-            name="password_confirmation"
-            label={t('Verify Password')}
-            value={data.password_confirmation}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            color="secondary"
-          />
-          <Spacing />
-          <SpaceBetween paddingTop={0}>
-            <Box />
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              startIcon={<LockResetIcon />}
-              disabled={processing}
-            >
-              {t('Reset Password')}
-            </Button>
-          </SpaceBetween>
-        </form>
-      </FormPaper>
+      <Form
+        subscription={{ pristine: true, submitting: true }}
+        onSubmit={(data) =>
+          new Promise<void>((resolve) =>
+            router.post(
+              route('password.store'),
+              { ...data, email, token },
+              { onFinish: () => resolve() },
+            ),
+          )
+        }
+        render={({ submitting, handleSubmit }) => (
+          <form onSubmit={handleSubmit}>
+            <div className="auth-form-content">
+              <Collapse in={Boolean(fuckErrors.email)}>
+                <Alert onClose={() => removeError('email')} severity="error">
+                  {fuckErrors.email}
+                </Alert>
+                <div className="spacing" />
+              </Collapse>
+              <Field
+                name="password"
+                subscription={subscription}
+                render={({ input }) => (
+                  <TextFieldPassword
+                    {...input}
+                    onChange={onChangeDecorator(input.onChange)}
+                    label={t('Password')}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <VpnKeyIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    fullWidth
+                    color="secondary"
+                    error={Boolean(fuckErrors[input.name])}
+                    helperText={fuckErrors[input.name]}
+                  />
+                )}
+              />
+              <div className="spacing" />
+              <Field
+                name="password_confirmation"
+                subscription={subscription}
+                render={({ input }) => (
+                  <TextFieldPassword
+                    {...input}
+                    onChange={onChangeDecorator(input.onChange)}
+                    label={t('Verify Password')}
+                    InputProps={{
+                      startAdornment: (
+                        <InputAdornment position="start">
+                          <LockIcon />
+                        </InputAdornment>
+                      ),
+                    }}
+                    fullWidth
+                    color="secondary"
+                    error={Boolean(fuckErrors[input.name])}
+                    helperText={fuckErrors[input.name]}
+                  />
+                )}
+              />
+              <div className="spacing" />
+              <Grid container justifyContent="flex-end">
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<LockResetIcon />}
+                  disabled={submitting}
+                >
+                  {t('Reset Password')}
+                </Button>
+              </Grid>
+            </div>
+            <div className="spacing" />
+            <div className="auth-form-footer">
+              <Typography variant="subtitle1">
+                {t('Are you remember?')}
+                &nbsp;
+                <Link href={route('login')}>{t('Login now!')}</Link>
+              </Typography>
+            </div>
+          </form>
+        )}
+      />
     </Layout>
   );
 }

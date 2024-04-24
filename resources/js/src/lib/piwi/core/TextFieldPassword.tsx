@@ -26,6 +26,8 @@ export default function TextFieldPassword(props: TextFieldProps) {
               onMouseDown={(ev) => {
                 ev.preventDefault();
               }}
+              // eslint-disable-next-line react/destructuring-assignment
+              disabled={props.disabled}
             >
               {showPassword ? <Visibility /> : <VisibilityOff />}
             </IconButton>

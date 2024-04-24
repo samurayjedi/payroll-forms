@@ -18,7 +18,27 @@ export function usePiwiTheme() {
       createTheme(
         {
           palette: {
-            mode: 'dark',
+            mode: 'light',
+            primary: {
+              main: '#6F42C1',
+              light: '#9F7AED',
+              dark: '#4B2995',
+            },
+            secondary: {
+              main: '#FF9933',
+              light: '#FFCC99',
+              dark: '#CC6600',
+            },
+          },
+          components: {
+            MuiButton: {
+              styleOverrides: {
+                contained: {
+                  color: 'white',
+                },
+                // root: {},
+              },
+            },
           },
         },
         MaterialLocales[language as keyof typeof MaterialLocales],

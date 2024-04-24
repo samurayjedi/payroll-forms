@@ -94,6 +94,7 @@
     "react-hooks/exhaustive-deps": "warn",
     "no-param-reassign": "warn",
     "no-case-declarations": "off",
-    "camelcase": "off"
+    "camelcase": "off",
+    "no-promise-executor-return": "off"
   }
 }

@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Link } from '@inertiajs/react';
 import { Tooltip } from '@mui/material';
 
-export default function Logo() {
+export default function Logo({ size }: { size: number }) {
   const { t } = useTranslation();
 
   return (
@@ -12,7 +12,8 @@ export default function Logo() {
         <img
           src="/storage/images/logo.png"
           alt="logo.png"
-          height="120px"
+          height={size}
+          width={size}
           style={{ objectFit: 'cover' }}
         />
       </Tooltip>

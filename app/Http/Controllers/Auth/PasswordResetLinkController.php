@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Password;
 use Illuminate\Validation\ValidationException;
 use Inertia\Inertia;
 use Inertia\Response;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\PasswordResetEmail;
 
 class PasswordResetLinkController extends Controller
 {
@@ -33,15 +35,25 @@ class PasswordResetLinkController extends Controller
             'email' => 'required|email',
         ]);
 
-        // We will send the password reset link to this user. Once we have attempted
-        // to send the link, we will examine the response then see the message we
-        // need to show to the user. Finally, we'll send out a proper response.
-        $status = Password::sendResetLink(
-            $request->only('email')
-        );
+        /* In theory, it's not necesary the use of the second callback argument, but
+         * for some fuck reason, when i leave as default, it throws me the error:
+         * DOMDocument::loadHTML(): Argument #1 ($source) must not be empty.
+         * for that reason, i manually send the email, check Illuminate\Auth\Passwords\PasswordBroker,
+         * Password::sendResetLink inherit from there, and there already check that the email exists, etc, etc,
+         * only the callback is trigered when all is successful, the callback have 2 entries or parameters,
+         * the first is the user (Illuminate\Contracts\Auth\CanResetPassword) and the second its the generated token (string).
+        */
+        /*
+         * no necesary, i moved this functionallity to app/providers/AppServiceProvider
+        $status = Password::sendResetLink($request->only('email'), function ($user, $token) {
+            $email = $user->getEmailForPasswordReset();
+            Mail::to($email)->send(new PasswordResetEmail($token, $email));
+        }); */
+        $status = Password::sendResetLink($request->only('email'));
 
         if ($status == Password::RESET_LINK_SENT) {
-            return back()->with('status', __($status));
+            // return back()->with('status', __($status));
+            return redirect('login')->with('status', __($status));
         }
 
         throw ValidationException::withMessages([

@@ -1,108 +1,86 @@
-import React, { useState } from 'react';
 import { route } from 'ziggy-js';
 import { useTranslation } from 'react-i18next';
-import { Link, useForm } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import { Form, Field } from 'react-final-form';
 import {
   TextField,
   Typography,
-  Box,
-  Alert,
-  Collapse,
   InputAdornment,
   Button,
+  Grid,
 } from '@mui/material';
 import { Person as PersonIcon, Email as EmailIcon } from '@mui/icons-material';
-import {
-  Spacing,
-  FormPaper,
-  SpaceBetween,
-  ErrorsAlert,
-  FormFooterStyled,
-} from '@/src/auth/AuthComponents';
-import Layout from '@/src/auth/Layout';
+import Layout from '@/src/Layouts/AuthLayout';
+import { useErrors } from '@/hooks';
 
-export interface ForgotPasswordForm {
-  email: string;
-}
-
-export default function ForgotPassword({ status }: { status: string }) {
+export default function ForgotPassword() {
   const { t } = useTranslation();
-  const [openAlerts, setOpenAlerts] = useState(false);
-  const { data, setData, post, processing, errors } =
-    useForm<ForgotPasswordForm>({
-      email: '',
-    });
-  const { email } = data;
-
-  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setData(ev.target.name as keyof ForgotPasswordForm, ev.target.value);
-  };
+  const [fuckErrors, onChangeDecorator] = useErrors();
 
   return (
     <Layout>
-      <FormPaper label={t('Forgot Password?')}>
-        {status && (
-          <Collapse in={openAlerts} className="alert">
-            <Alert onClose={() => setOpenAlerts(false)}>{status}</Alert>
-          </Collapse>
+      <Form
+        subscription={{ submitting: true }}
+        onSubmit={(data) =>
+          new Promise<void>((resolve) =>
+            router.post(route('password.email'), data, {
+              onFinish: () => resolve(),
+            }),
+          )
+        }
+        render={({ submitting, handleSubmit }) => (
+          <form className="auth-form-content" onSubmit={handleSubmit}>
+            <Typography variant="subtitle1">
+              {t(
+                'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
+              )}
+            </Typography>
+            <div className="spacing" />
+            <Field
+              name="email"
+              subscription={{ value: true, submitting: true }}
+              render={({ input }) => (
+                <TextField
+                  {...input}
+                  onChange={onChangeDecorator(input.onChange)}
+                  label={t('Email')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <PersonIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth
+                  color="secondary"
+                  error={Boolean(fuckErrors[input.name])}
+                  helperText={fuckErrors[input.name]}
+                  disabled={submitting}
+                />
+              )}
+            />
+            <div className="spacing" />
+            <Grid container justifyContent="flex-end">
+              <Button
+                type="submit"
+                variant="contained"
+                color="secondary"
+                startIcon={<EmailIcon />}
+                disabled={submitting}
+              >
+                {t('Send Reset Link')}
+              </Button>
+            </Grid>
+          </form>
         )}
-        <ErrorsAlert
-          openAlerts={openAlerts}
-          errors={errors}
-          onClose={() => setOpenAlerts(false)}
-        />
-        <form
-          onSubmit={(ev) => {
-            ev.preventDefault();
-            post(route('password.email'), {
-              onFinish: () => setOpenAlerts(true),
-            });
-          }}
-        >
-          <Typography variant="subtitle1">
-            {t(
-              'Forgot your password? No problem. Just let us know your email address and we will email you a password reset link that will allow you to choose a new one.',
-            )}
-          </Typography>
-          <Spacing />
-          <TextField
-            id="signin-user"
-            name="email"
-            label={t('Email')}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <PersonIcon />
-                </InputAdornment>
-              ),
-            }}
-            value={email || ''}
-            onChange={handleChange}
-            fullWidth
-            color="secondary"
-          />
-          <Spacing />
-          <SpaceBetween paddingTop={0}>
-            <Box />
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              startIcon={<EmailIcon />}
-              disabled={processing}
-            >
-              {t('Send Reset Link')}
-            </Button>
-          </SpaceBetween>
-        </form>
-        <FormFooterStyled>
-          <Typography variant="subtitle1">
-            {t('Are you remember?')}
-            &nbsp;
-            <Link href={route('login')}>{t('Login now!')}</Link>
-          </Typography>
-        </FormFooterStyled>
-      </FormPaper>
+      />
+      <div className="auth-form-footer">
+        <Typography variant="subtitle1">
+          {t('Are you remember?')}
+          &nbsp;
+          <Link href={route('login')}>{t('Login now!')}</Link>
+        </Typography>
+      </div>
     </Layout>
   );
 }

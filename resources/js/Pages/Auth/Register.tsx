@@ -1,15 +1,16 @@
-import React, { useState, useEffect } from 'react';
 import { route } from 'ziggy-js';
 import { useTranslation } from 'react-i18next';
-import { Link, useForm } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
+import { Form, Field } from 'react-final-form';
+import { FieldSubscription } from 'final-form';
 import {
   Button,
   IconButton,
   TextField,
   InputAdornment,
   Tooltip,
-  Box,
   Typography,
+  Grid,
 } from '@mui/material';
 // Icons
 import {
@@ -23,154 +24,157 @@ import {
 } from '@mui/icons-material';
 // Internal Dependencies
 import TextFieldPassword from '@/src/lib/piwi/core/TextFieldPassword';
-import {
-  Spacing,
-  FormPaper,
-  SpaceBetween,
-  ErrorsAlert,
-  FormFooterStyled,
-} from '@/src/auth/AuthComponents';
-import Layout from '@/src/auth/Layout';
+import Layout from '@/src/Layouts/AuthLayout';
+import { useErrors } from '@/hooks';
 
 export default function Register() {
   const { t } = useTranslation();
-  const [openAlerts, setOpenAlerts] = useState(false);
-  const { data, setData, post, processing, errors, reset } =
-    useForm<SignUpForm>({
-      name: '',
-      email: '',
-      password: '',
-      password_confirmation: '',
-    });
-  const { name, email, password, password_confirmation } = data;
-
-  useEffect(
-    () => () => {
-      reset('password', 'password_confirmation');
-    },
-    [],
-  );
-
-  const handleChange = (ev: React.ChangeEvent<HTMLInputElement>) => {
-    setData(ev.target.name as keyof SignUpForm, ev.target.value);
-  };
-
-  const submit = (e: React.SyntheticEvent) => {
-    e.preventDefault();
-    post(route('register'), {
-      onFinish: () => setOpenAlerts(true),
-    });
-  };
+  const [fuckErrors, onChangeDecorator] = useErrors();
+  const subscription: FieldSubscription = { value: true, submitting: true };
 
   return (
     <Layout>
-      <FormPaper label={t('Register')}>
-        <ErrorsAlert
-          openAlerts={openAlerts}
-          errors={errors}
-          onClose={() => setOpenAlerts(false)}
-        />
-        <form id="rico-signup-form" onSubmit={submit}>
-          <TextField
-            id="signup-email"
-            name="email"
-            label={t('Email')}
-            value={email}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <EmailIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            color="secondary"
-          />
-          <Spacing />
-          <TextField
-            id="signup-name"
-            name="name"
-            label={t('First & Last Name')}
-            value={name}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <AccountCircleIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            color="secondary"
-          />
-          <Spacing />
-          <TextFieldPassword
-            id="signup-password"
-            name="password"
-            label={t('Password')}
-            value={password}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <VpnKeyIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            color="secondary"
-          />
-          <Spacing />
-          <TextFieldPassword
-            id="signup-verify-password"
-            name="password_confirmation"
-            label={t('Verify Password')}
-            value={password_confirmation}
-            onChange={handleChange}
-            InputProps={{
-              startAdornment: (
-                <InputAdornment position="start">
-                  <LockIcon />
-                </InputAdornment>
-              ),
-            }}
-            fullWidth
-            color="secondary"
-          />
-          <Spacing />
-          <SpaceBetween paddingTop={0}>
-            <Box>
-              <Tooltip title={t('Register via Google')}>
-                <IconButton>
-                  <GoogleIcon />
-                </IconButton>
-              </Tooltip>
-              <Tooltip title={t('Register via Facebook')}>
-                <IconButton>
-                  <FacebookIcon />
-                </IconButton>
-              </Tooltip>
-            </Box>
-            <Button
-              type="submit"
-              variant="contained"
-              color="secondary"
-              startIcon={<HowToRegIcon />}
-              disabled={processing}
-            >
-              {t('Register')}
-            </Button>
-          </SpaceBetween>
-        </form>
-        <FormFooterStyled>
-          <Typography variant="subtitle1">
-            {t('Already have one?')}
-            &nbsp;
-            <Link href={route('login')}>{t('Login now!')}</Link>
-          </Typography>
-        </FormFooterStyled>
-      </FormPaper>
+      <Form
+        onSubmit={(data) =>
+          new Promise<void>((resolve) =>
+            router.post(route('register'), data, { onFinish: () => resolve() }),
+          )
+        }
+        subscription={{ submitting: true }}
+        render={({ submitting, handleSubmit }) => (
+          <form className="auth-form-content" onSubmit={handleSubmit}>
+            <Field
+              name="email"
+              subscription={subscription}
+              render={({ input }) => (
+                <TextField
+                  {...input}
+                  label={t('Email')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <EmailIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth
+                  color="secondary"
+                  disabled={submitting}
+                  onChange={onChangeDecorator(input.onChange)}
+                  error={Boolean(fuckErrors[input.name])}
+                  helperText={fuckErrors[input.name]}
+                />
+              )}
+            />
+            <div className="spacing" />
+            <Field
+              name="name"
+              subscription={subscription}
+              render={({ input }) => (
+                <TextField
+                  {...input}
+                  label={t('First & Last Name')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <AccountCircleIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth
+                  color="secondary"
+                  disabled={submitting}
+                  onChange={onChangeDecorator(input.onChange)}
+                  error={Boolean(fuckErrors[input.name])}
+                  helperText={fuckErrors[input.name]}
+                />
+              )}
+            />
+            <div className="spacing" />
+            <Field
+              name="password"
+              subscription={subscription}
+              render={({ input }) => (
+                <TextFieldPassword
+                  {...input}
+                  label={t('Password')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <VpnKeyIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth
+                  color="secondary"
+                  disabled={submitting}
+                  onChange={onChangeDecorator(input.onChange)}
+                  error={Boolean(fuckErrors[input.name])}
+                  helperText={fuckErrors[input.name]}
+                />
+              )}
+            />
+            <div className="spacing" />
+            <Field
+              name="password_confirmation"
+              subscription={subscription}
+              render={({ input }) => (
+                <TextFieldPassword
+                  {...input}
+                  label={t('Verify Password')}
+                  InputProps={{
+                    startAdornment: (
+                      <InputAdornment position="start">
+                        <LockIcon />
+                      </InputAdornment>
+                    ),
+                  }}
+                  fullWidth
+                  color="secondary"
+                  disabled={submitting}
+                  onChange={onChangeDecorator(input.onChange)}
+                  error={Boolean(fuckErrors[input.name])}
+                  helperText={fuckErrors[input.name]}
+                />
+              )}
+            />
+            <div className="spacing" />
+            <Grid container>
+              <Grid item>
+                <Tooltip title={t('Register via Google')}>
+                  <IconButton disabled={submitting}>
+                    <GoogleIcon />
+                  </IconButton>
+                </Tooltip>
+                <Tooltip title={t('Register via Facebook')}>
+                  <IconButton disabled={submitting}>
+                    <FacebookIcon />
+                  </IconButton>
+                </Tooltip>
+              </Grid>
+              <Grid flex={1} />
+              <Grid item>
+                <Button
+                  type="submit"
+                  variant="contained"
+                  color="secondary"
+                  startIcon={<HowToRegIcon />}
+                  disabled={submitting}
+                >
+                  {t('Register')}
+                </Button>
+              </Grid>
+            </Grid>
+          </form>
+        )}
+      />
+      <div className="auth-form-footer">
+        <Typography variant="subtitle1">
+          {t('Already have one?')}
+          &nbsp;
+          <Link href={route('login')}>{t('Login now!')}</Link>
+        </Typography>
+      </div>
     </Layout>
   );
 }
