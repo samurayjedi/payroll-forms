@@ -3,7 +3,7 @@ import styled from '@emotion/styled';
 import { Link } from '@inertiajs/react';
 import { Tooltip } from '@mui/material';
 
-export default function Logo({ size }: { size: number }) {
+export default function Logo({ size = 80 }: { size?: number }) {
   const { t } = useTranslation();
 
   return (

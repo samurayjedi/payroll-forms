@@ -13,7 +13,6 @@ import '@fontsource/roboto/500.css';
 import '@fontsource/roboto/700.css';
 // continue with internal dependencies....
 import { usePiwiTheme } from './hooks';
-import './bootstrap';
 import '../css/app.css';
 
 i18nTranslator
