@@ -9,11 +9,13 @@ import {
   useRffCheckOnChange,
 } from '@/hooks';
 import { parse } from '@/src/lib/piwi/dateFnsFacade';
+import days from '@/assets/days.json';
 import Section from '@/src/Components/Section';
 import Options from '@/src/lib/piwi/core/Options';
 import TextFieldMasked from '@/src/lib/piwi/core/TextFieldMasked';
 import DatePicker from '@/src/lib/piwi/core/DatePicker';
 import Aggregator from '@/src/Components/Aggregator';
+import Select from '@/src/lib/piwi/core/Select';
 import {
   payrollFrequencies,
   kindOfPayments,
@@ -218,8 +220,9 @@ export default function SectionPayrollSetup({
                   name="preferred_day_to_process"
                   subscription={{ value: true }}
                   render={(pollito) => (
-                    <SelectDays
+                    <Select
                       {...pollito.input}
+                      items={days}
                       variant="standard"
                       color="secondary"
                       disabled={processing}
