@@ -6,6 +6,8 @@ import BrowserLanguageDetector from 'i18next-browser-languagedetector';
 import LocalesResourcesBackend from 'i18next-http-backend';
 import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
+import { AdapterDateFns } from '@mui/x-date-pickers/AdapterDateFns';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 // fonts required by mui
 import '@fontsource/roboto/300.css';
 import '@fontsource/roboto/400.css';
@@ -56,8 +58,10 @@ function Piwi({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeProvider theme={theme}>
-      <CssBaseline />
-      {children}
+      <LocalizationProvider dateAdapter={AdapterDateFns}>
+        <CssBaseline />
+        {children}
+      </LocalizationProvider>
     </ThemeProvider>
   );
 }

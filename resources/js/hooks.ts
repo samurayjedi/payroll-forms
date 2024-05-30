@@ -1,9 +1,12 @@
-import { useState, useEffect, useMemo } from 'react';
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import { useState, useEffect, useMemo, useCallback } from 'react';
+import { FieldArrayRenderProps } from 'react-final-form-arrays';
 import _ from 'lodash';
-import { usePage } from '@inertiajs/react';
+import { usePage, router } from '@inertiajs/react';
 import { useTranslation } from 'react-i18next';
 import { createTheme } from '@mui/material/styles';
 import { esES, enUS } from '@mui/material/locale';
+import { route } from 'ziggy-js';
 
 const MaterialLocales = {
   'es-ES': esES,
@@ -20,21 +23,21 @@ export function usePiwiTheme() {
           palette: {
             mode: 'light',
             primary: {
-              main: '#6F42C1',
-              light: '#9F7AED',
-              dark: '#4B2995',
+              main: '#1a1a1a',
+              light: '#333333',
+              dark: '#000000',
             },
             secondary: {
-              main: '#FF9933',
-              light: '#FFCC99',
-              dark: '#CC6600',
+              main: '#fdfd1f',
+              light: '#00ffa2',
+              dark: '#ff00f0',
             },
           },
           components: {
             MuiButton: {
               styleOverrides: {
                 contained: {
-                  color: 'white',
+                  color: '#4b4b4d',
                 },
                 // root: {},
               },
@@ -74,3 +77,44 @@ export function useErrors() {
 
   return [fuckErrors, onChangeDecorator, removeError] as const;
 }
+
+export function useSubmitHandler(link: string) {
+  const callback = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    (data: Record<string, any>) =>
+      new Promise<void>((resolve) =>
+        router.post(route(link), data, {
+          onFinish: () => resolve(),
+        }),
+      ),
+    [link],
+  );
+
+  return callback;
+}
+
+export function useRffCheckOnChange() {
+  const [, , removeError] = useErrors();
+
+  return (fields: RffFields) => (ev: unknown) => {
+    removeError(fields.name);
+    const checked = _.get(ev, 'target.checked', false) as boolean;
+    const value = _.get(ev, 'target.value', '') as string;
+    if (checked) {
+      fields.push(value);
+    } else {
+      fields.remove(fields.value.indexOf(value));
+    }
+  };
+}
+
+export function useRffAggregatorOnChange() {
+  const [, , removeError] = useErrors();
+
+  return (fields: RffFields) => (v: string) => {
+    fields.push(v);
+    removeError(fields.name);
+  };
+}
+
+type RffFields = FieldArrayRenderProps<any, HTMLElement>['fields'];

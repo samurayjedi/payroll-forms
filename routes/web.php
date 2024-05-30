@@ -20,6 +20,19 @@ Route::middleware(['auth', 'password.confirm'])->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::middleware(['auth'])->group(function () {
+    /** Form/Setup */
+    Route::get('/form-setup', [
+        FormSetupController::class,
+        'create',
+    ])->name('form-setup');
+
+    Route::post('/form-setup', [
+        FormSetupController::class,
+        'process',
+    ])->name('form-setup.process');
+});
+
 Route::get('/locales/{language}/translation.json', [LocaleController::class, 'handle']);
 Route::get('/locales/change/{language}', [LocaleController::class, 'changeLanguage'])->name('locale.change');
 

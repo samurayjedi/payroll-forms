@@ -15,7 +15,7 @@ export default function Profile({
 
   return (
     <AppLayout>
-      <Container>
+      <Container maxWidth="lg">
         <Paper>
           <Typography variant="h5" fontWeight="bold">
             {t('Profile Information')}

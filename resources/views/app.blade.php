@@ -15,9 +15,9 @@
         <?php
         $appFilePath = public_path().'/js/app.bundle.js';
         $uri = file_exists($appFilePath) ? '/js' : 'http://localhost:3000'; ?>
-        <script defer="defer" src="<?= $uri ?>/vendors-app.bundle.js"></script>
+        <!-- <script defer="defer" src="<?= $uri ?>/vendors-app.bundle.js"></script> -->
         <script defer="defer" src="<?= $uri ?>/app.bundle.js"></script>
-        <script defer="defer" src="<?= $uri ?>/runtime.bundle.js"></script>
+        <!-- <script defer="defer" src="<?= $uri ?>/runtime.bundle.js"></script> -->
         @inertiaHead
     </head>
     <body class="font-sans antialiased">

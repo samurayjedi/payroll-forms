@@ -11,18 +11,13 @@ module.exports = {
       // dependOn,
     },
   },
-  optimization: {
+  /* optimization: {
     splitChunks: {
       // include all types of chunks
       chunks: 'all',
-      name: (module, chunks, cacheGroupKey) => {
-        const allChunksNames = chunks.map((chunk) => chunk.name).join('-');
-
-        return `vendors-${allChunksNames}`;
-      },
     },
     runtimeChunk: { name: 'runtime' }, // the same that runtimeChunk: 'single'
-  },
+  }, */
   output: {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, './public/js/'),
