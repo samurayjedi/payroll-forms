@@ -20,3 +20,8 @@ export const taxImpoundIntervals = [
 ] as const;
 export const yesNo = ['No', 'Yes'] as const;
 export const kindOfDocuments = ['W2', '1099 Nec', 'Both', 'N/A'] as const;
+export const salexTaxManagementMethods = [
+  'PuntualPayroll is responsible for submitting the reports and pay the taxes.',
+  'PunctualPayroll only submit the reports',
+] as const;
+export const salesTaxPaymentMethod = ['Bank Account', 'Credit Card'];

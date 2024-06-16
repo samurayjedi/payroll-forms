@@ -3,11 +3,7 @@ import { add } from 'date-fns';
 import { Field } from 'react-final-form';
 import { FieldArray } from 'react-final-form-arrays';
 import { Box, Typography } from '@mui/material';
-import {
-  useErrors,
-  useRffAggregatorOnChange,
-  useRffCheckOnChange,
-} from '@/hooks';
+import { useErrors, useRffCheckOnChange } from '@/hooks';
 import { parse } from '@/src/lib/piwi/dateFnsFacade';
 import days from '@/assets/days.json';
 import Section from '@/src/Components/Section';
@@ -29,13 +25,12 @@ import {
 import * as styles from './styles';
 
 export default function SectionPayrollSetup({
-  processing,
+  submitting,
 }: {
-  processing: boolean;
+  submitting: boolean;
 }) {
   const { t } = useTranslation();
   const [fuckErrors, onChangeDecorator, removeError] = useErrors();
-  const aggregatorOnChange = useRffAggregatorOnChange();
   const checksOnChange = useRffCheckOnChange();
 
   return (
@@ -50,7 +45,7 @@ export default function SectionPayrollSetup({
               type="radio"
               css={styles.radios}
               label={`1 - ${t('Are you interested in the payroll service?')}`}
-              disabled={processing}
+              disabled={submitting}
               options={yesNo}
               onChange={onChangeDecorator(input.onChange)}
               error={Boolean(fuckErrors[input.name])}
@@ -71,7 +66,7 @@ export default function SectionPayrollSetup({
                         'What type of payment does your company use?',
                       )}`}
                       options={kindOfDocuments}
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={onChangeDecorator(pollito.input.onChange)}
                       error={Boolean(fuckErrors[pollito.input.name])}
                       helperText={fuckErrors[pollito.input.name]}
@@ -92,7 +87,7 @@ export default function SectionPayrollSetup({
                         'What is the frequency of your payroll?',
                       )}`}
                       options={payrollFrequencies}
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={checksOnChange(fields)}
                       error={Boolean(fuckErrors[fields.name])}
                       helperText={fuckErrors[fields.name]}
@@ -113,7 +108,7 @@ export default function SectionPayrollSetup({
                         'Check the reporting methods you prefer?',
                       )}`}
                       options={reportMethods}
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={checksOnChange(fields)}
                       error={Boolean(fuckErrors[fields.name])}
                       helperText={fuckErrors[fields.name]}
@@ -134,7 +129,7 @@ export default function SectionPayrollSetup({
                         'How do you want to pay your employees?',
                       )}`}
                       options={kindOfPayments}
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={checksOnChange(fields)}
                       error={Boolean(fuckErrors[fields.name])}
                       helperText={fuckErrors[fields.name]}
@@ -155,7 +150,7 @@ export default function SectionPayrollSetup({
                       disablePast
                       color="secondary"
                       variant="standard"
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={onChangeDecorator(pollito.input.onChange)}
                       error={Boolean(fuckErrors[pollito.input.name])}
                       helperText={fuckErrors[pollito.input.name]}
@@ -177,7 +172,7 @@ export default function SectionPayrollSetup({
                           {...pollito.input}
                           color="secondary"
                           variant="standard"
-                          disabled={processing}
+                          disabled={submitting}
                           onChange={onChangeDecorator(pollito.input.onChange)}
                           error={Boolean(fuckErrors[pollito.input.name])}
                           helperText={fuckErrors[pollito.input.name]}
@@ -194,7 +189,7 @@ export default function SectionPayrollSetup({
                                 days: 1,
                               })}
                               variant="standard"
-                              disabled={processing}
+                              disabled={submitting}
                               onChange={onChangeDecorator(
                                 superpollito.input.onChange,
                               )}
@@ -225,7 +220,7 @@ export default function SectionPayrollSetup({
                       items={days}
                       variant="standard"
                       color="secondary"
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={onChangeDecorator(pollito.input.onChange)}
                       error={Boolean(fuckErrors[pollito.input.name])}
                       helperText={fuckErrors[pollito.input.name]}
@@ -238,14 +233,15 @@ export default function SectionPayrollSetup({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`9 - ${t(
                           'How do you prefer to pick up your checks?',
                         )}`}
-                        disabled={processing}
-                        radios={pickupMethods}
+                        disabled={submitting}
+                        options={pickupMethods}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -262,11 +258,12 @@ export default function SectionPayrollSetup({
                             name="pickup_day"
                             subscription={{ value: true }}
                             render={(superpollito) => (
-                              <SelectDays
+                              <Select
                                 {...superpollito.input}
+                                items={days}
                                 variant="standard"
                                 color="secondary"
-                                disabled={processing}
+                                disabled={submitting}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
@@ -287,25 +284,17 @@ export default function SectionPayrollSetup({
                   name="report_delivery_method"
                   subscription={{ value: true }}
                   render={({ fields }) => (
-                    <ChecksCollection
+                    <Options
+                      css={styles.checkboxes}
+                      type="check"
                       name={fields.name}
                       value={fields.value}
                       label={`10 - ${t(
                         'How do you want to receive your reports?',
                       )}`}
-                      checks={reportsDeliveryMethod}
-                      formGroupProps={{
-                        css: styles.checkboxes,
-                      }}
-                      disabled={processing}
-                      onChange={(ev) => {
-                        removeError(fields.name);
-                        if (ev.target.checked) {
-                          fields.push(ev.target.value);
-                        } else {
-                          fields.remove(fields.value.indexOf(ev.target.value));
-                        }
-                      }}
+                      options={reportsDeliveryMethod}
+                      disabled={submitting}
+                      onChange={checksOnChange(fields)}
                       error={Boolean(fuckErrors[fields.name])}
                       helperText={fuckErrors[fields.name]}
                     />
@@ -328,7 +317,7 @@ export default function SectionPayrollSetup({
                       }}
                       variant="standard"
                       color="secondary"
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={onChangeDecorator(pollito.input.onChange)}
                       error={Boolean(fuckErrors[pollito.input.name])}
                       helperText={fuckErrors[pollito.input.name]}
@@ -341,14 +330,15 @@ export default function SectionPayrollSetup({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`12 - ${t(
                           'You make additional deductions to your employees?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                       />
                       {pollito.input.value === yesNo[1] && (
                         <div className="subquestions">
@@ -366,7 +356,7 @@ export default function SectionPayrollSetup({
                                 color="secondary"
                                 variant="standard"
                                 renderMode="input"
-                                disabled={processing}
+                                disabled={submitting}
                                 onAdd={(v) => {
                                   fields.push(v);
                                   removeError(fields.name);
@@ -385,14 +375,15 @@ export default function SectionPayrollSetup({
                             name="tax_impound_interval"
                             subscription={{ value: true }}
                             render={(superpollito) => (
-                              <RadiosCollection
+                              <Options
                                 {...superpollito.input}
+                                type="radio"
                                 css={styles.radios}
                                 label={t(
                                   'For tax withholding payment (state unemployment 941), how do you want to make deductions to these payments?',
                                 )}
-                                disabled={processing}
-                                radios={taxImpoundIntervals}
+                                disabled={submitting}
+                                options={taxImpoundIntervals}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
@@ -414,12 +405,12 @@ export default function SectionPayrollSetup({
                             name="prefer_day_to_be_charged_from_bank"
                             subscription={{ value: true }}
                             render={(superpollito) => (
-                              <SelectDays
+                              <Select
                                 {...superpollito.input}
+                                items={[days[0], days[4]]}
                                 variant="standard"
                                 color="secondary"
-                                showOnly={[DaysOfWeek[0], DaysOfWeek[4]]}
-                                disabled={processing}
+                                disabled={submitting}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
@@ -441,12 +432,13 @@ export default function SectionPayrollSetup({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`13 - ${t('Your company has divisions?')}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -466,7 +458,7 @@ export default function SectionPayrollSetup({
                                 value={fields.value}
                                 color="secondary"
                                 variant="standard"
-                                disabled={processing}
+                                disabled={submitting}
                                 onAdd={(v) => {
                                   fields.push(v);
                                   removeError(fields.name);
@@ -485,14 +477,15 @@ export default function SectionPayrollSetup({
                             name="payments_separated_by_divisions"
                             subscription={{ value: true }}
                             render={(superpollito) => (
-                              <RadiosCollection
+                              <Options
                                 {...superpollito.input}
+                                type="radio"
                                 css={styles.radios}
                                 label={t(
                                   'Will employee payments be separated by branch?',
                                 )}
-                                disabled={processing}
-                                radios={yesNo}
+                                disabled={submitting}
+                                options={yesNo}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
@@ -514,12 +507,13 @@ export default function SectionPayrollSetup({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`14 - ${t('Your company has departaments?')}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -541,7 +535,7 @@ export default function SectionPayrollSetup({
                                 value={fields.value}
                                 color="secondary"
                                 variant="standard"
-                                disabled={processing}
+                                disabled={submitting}
                                 onAdd={(v) => {
                                   fields.push(v);
                                   removeError(fields.name);
@@ -566,14 +560,15 @@ export default function SectionPayrollSetup({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`15 - ${t(
                           'What types of positions does your company have (Manager, Corporate Communications Manager, etc.)?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -593,7 +588,7 @@ export default function SectionPayrollSetup({
                                 value={fields.value}
                                 color="secondary"
                                 variant="standard"
-                                disabled={processing}
+                                disabled={submitting}
                                 onAdd={(v) => {
                                   fields.push(v);
                                   removeError(fields.name);

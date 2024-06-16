@@ -1,14 +1,14 @@
 import { useTranslation } from 'react-i18next';
 import { Field } from 'react-final-form';
 import { Box, Typography, TextField } from '@mui/material';
-import { useErrors } from '../../hooks';
-import { yesNo } from '../../store/formSetup';
-import { Section } from '../../components/FormLayout';
-import RadiosCollection from '../../lib/material/RadiosCollection';
-import InputFile from '../../lib/material/InputFile';
+import { useErrors } from '@/hooks';
+import Section from '@/src/Components/Section';
+import Options from '@/src/lib/piwi/core/Options';
+import InputFile from '@/src/lib/piwi/core/InputFile';
+import { yesNo } from './vars';
 import * as styles from './styles';
 
-export default function SectionTaxes({ processing }: { processing: boolean }) {
+export default function SectionTaxes({ submitting }: { submitting: boolean }) {
   const { t } = useTranslation();
   const [fuckErrors, onChangeDecorator] = useErrors();
 
@@ -19,14 +19,15 @@ export default function SectionTaxes({ processing }: { processing: boolean }) {
         subscription={{ value: true }}
         render={({ input }) => (
           <>
-            <RadiosCollection
+            <Options
               {...input}
+              type="radio"
               css={styles.radios}
               label={`1 - ${t(
                 'Did you pay personal/business taxes last year?',
               )}`}
-              disabled={processing}
-              radios={yesNo}
+              disabled={submitting}
+              options={yesNo}
               onChange={onChangeDecorator(input.onChange)}
               error={Boolean(fuckErrors[input.name])}
               helperText={fuckErrors[input.name]}
@@ -46,7 +47,7 @@ export default function SectionTaxes({ processing }: { processing: boolean }) {
                         {...pollito.input}
                         multiple
                         accept="application/pdf, image/png, image/gif, image/jpeg"
-                        disabled={processing}
+                        disabled={submitting}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -60,14 +61,15 @@ export default function SectionTaxes({ processing }: { processing: boolean }) {
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`2 - ${t(
                           'Have you had problems with your taxes?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -89,7 +91,7 @@ export default function SectionTaxes({ processing }: { processing: boolean }) {
                                 color="secondary"
                                 multiline
                                 rows={2}
-                                disabled={processing}
+                                disabled={submitting}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}

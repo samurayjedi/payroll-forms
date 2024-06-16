@@ -170,6 +170,8 @@ return [
     |
     */
 
+    'required_when' => 'El campo :attribute es obligatorio', //  cuando el campo :others.
+    'required_if_in' => 'El campo :attribute es obligatorio.', //  cuando :array continene ":items"
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

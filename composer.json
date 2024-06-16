@@ -9,13 +9,15 @@
   "license": "MIT",
   "require": {
     "php": "^8.2",
+    "dompdf/dompdf": "^3.0",
     "inertiajs/inertia-laravel": "^1.0",
     "laravel/framework": "^11.0",
     "laravel/sanctum": "^4.0",
     "laravel/tinker": "^2.9",
     "samurayjedi/laravel-docusign": "@dev",
     "tightenco/ziggy": "^2.0",
-    "zf1/zend-pdf": "^1.12"
+    "zf1/zend-pdf": "^1.12",
+    "clegginabox/pdf-merger": "dev-master"
   },
   "require-dev": {
     "fakerphp/faker": "^1.23",

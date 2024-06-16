@@ -1,19 +1,19 @@
 import { useTranslation } from 'react-i18next';
 import { Field } from 'react-final-form';
 import { Box, Typography, TextField } from '@mui/material';
-import { useErrors } from '../../hooks';
-import { yesNo } from '../../store/formSetup';
-import InputFileGroup from '../../lib/material/InputFileGroup';
-import InputFile from '../../lib/material/InputFile';
-import { Section } from '../../components/FormLayout';
-import RadiosCollection from '../../lib/material/RadiosCollection';
-import TextFieldPassword from '../../lib/material/TextFieldPassword';
+import { useErrors } from '@/hooks';
+import InputFileGroup from '@/src/lib/piwi/core/InputFileGroup';
+import InputFile from '@/src/lib/piwi/core/InputFile';
+import Section from '@/src/Components/Section';
+import Options from '@/src/lib/piwi/core/Options';
+import TextFieldPassword from '@/src/lib/piwi/core/TextFieldPassword';
+import { yesNo } from './vars';
 import * as styles from './styles';
 
 export default function SectionPreviousPayroll({
-  processing,
+  submitting,
 }: {
-  processing: boolean;
+  submitting: boolean;
 }) {
   const { t } = useTranslation();
   const [fuckErrors, onChangeDecorator] = useErrors();
@@ -25,12 +25,13 @@ export default function SectionPreviousPayroll({
         subscription={{ value: true }}
         render={({ input }) => (
           <>
-            <RadiosCollection
+            <Options
               {...input}
+              type="radio"
               css={styles.radios}
               label={`1 - ${t("You've done payroll in the last six months?")}`}
-              disabled={processing}
-              radios={yesNo}
+              disabled={submitting}
+              options={yesNo}
               onChange={onChangeDecorator(input.onChange)}
               error={Boolean(fuckErrors[input.name])}
               helperText={fuckErrors[input.name]}
@@ -50,7 +51,7 @@ export default function SectionPreviousPayroll({
                       {...pollito.input}
                       variant="standard"
                       color="secondary"
-                      disabled={processing}
+                      disabled={submitting}
                       onChange={onChangeDecorator(pollito.input.onChange)}
                       error={Boolean(fuckErrors[pollito.input.name])}
                       helperText={fuckErrors[pollito.input.name]}
@@ -63,12 +64,13 @@ export default function SectionPreviousPayroll({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`3 - ${t('Do you have system access?')}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -92,7 +94,7 @@ export default function SectionPreviousPayroll({
                                   label={t('User/Email')}
                                   variant="standard"
                                   color="secondary"
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -115,7 +117,7 @@ export default function SectionPreviousPayroll({
                                   label={t('Password')}
                                   variant="standard"
                                   color="secondary"
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -140,14 +142,15 @@ export default function SectionPreviousPayroll({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`4 - ${t(
                           'Did you collect the payroll reports?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -171,7 +174,7 @@ export default function SectionPreviousPayroll({
                                   label={t(
                                     'Select the payroll summary report documents',
                                   )}
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -191,7 +194,7 @@ export default function SectionPreviousPayroll({
                                 <InputFile
                                   {...superpollito.input}
                                   label={t('Select Pay stub copy document')}
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -211,7 +214,7 @@ export default function SectionPreviousPayroll({
                                 <InputFile
                                   {...superpollito.input}
                                   label={t('Select 941 report document')}
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -236,14 +239,15 @@ export default function SectionPreviousPayroll({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`5 - ${t(
                           'Are you aware of having a "Unemployment ID" license?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -265,7 +269,7 @@ export default function SectionPreviousPayroll({
                                 <InputFile
                                   {...superpollito.input}
                                   label={t('Select license')}
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -287,7 +291,7 @@ export default function SectionPreviousPayroll({
                                   label={t(
                                     'Select "Unemployment Report" document',
                                   )}
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -307,12 +311,13 @@ export default function SectionPreviousPayroll({
                             subscription={{ value: true }}
                             render={(superpollito) => (
                               <>
-                                <RadiosCollection
+                                <Options
                                   {...superpollito.input}
+                                  type="radio"
                                   css={styles.radios}
                                   label={t('Do you have system access?')}
-                                  disabled={processing}
-                                  radios={yesNo}
+                                  disabled={submitting}
+                                  options={yesNo}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -345,7 +350,7 @@ export default function SectionPreviousPayroll({
                                             label={t('User/Email')}
                                             variant="standard"
                                             color="secondary"
-                                            disabled={processing}
+                                            disabled={submitting}
                                             onChange={onChangeDecorator(
                                               megapollito.input.onChange,
                                             )}
@@ -370,7 +375,7 @@ export default function SectionPreviousPayroll({
                                             label={t('Password')}
                                             variant="standard"
                                             color="secondary"
-                                            disabled={processing}
+                                            disabled={submitting}
                                             onChange={onChangeDecorator(
                                               megapollito.input.onChange,
                                             )}
@@ -402,14 +407,15 @@ export default function SectionPreviousPayroll({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`6 - ${t(
                           'Are you aware of having a "Withholding ID" license?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -431,7 +437,7 @@ export default function SectionPreviousPayroll({
                                 <InputFile
                                   {...superpollito.input}
                                   label={t('Select license')}
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -453,7 +459,7 @@ export default function SectionPreviousPayroll({
                                   label={t(
                                     'Select "Wage Withholding Report" document',
                                   )}
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -473,12 +479,13 @@ export default function SectionPreviousPayroll({
                             subscription={{ value: true }}
                             render={(superpollito) => (
                               <>
-                                <RadiosCollection
+                                <Options
                                   {...superpollito.input}
+                                  type="radio"
                                   css={styles.radios}
                                   label={t('Do you have system access?')}
-                                  disabled={processing}
-                                  radios={yesNo}
+                                  disabled={submitting}
+                                  options={yesNo}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -511,7 +518,7 @@ export default function SectionPreviousPayroll({
                                             label={t('User/Email')}
                                             variant="standard"
                                             color="secondary"
-                                            disabled={processing}
+                                            disabled={submitting}
                                             onChange={onChangeDecorator(
                                               megapollito.input.onChange,
                                             )}
@@ -536,7 +543,7 @@ export default function SectionPreviousPayroll({
                                             label={t('Password')}
                                             variant="standard"
                                             color="secondary"
-                                            disabled={processing}
+                                            disabled={submitting}
                                             onChange={onChangeDecorator(
                                               megapollito.input.onChange,
                                             )}
@@ -568,14 +575,15 @@ export default function SectionPreviousPayroll({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`7 - ${t(
                           'Have you had problems with your payroll?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -597,7 +605,7 @@ export default function SectionPreviousPayroll({
                                 color="secondary"
                                 multiline
                                 rows={2}
-                                disabled={processing}
+                                disabled={submitting}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}

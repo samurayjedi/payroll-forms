@@ -7,7 +7,7 @@ use Dompdf\Dompdf;
 use Clegginabox\PDFMerger\PDFMerger;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Auth;
-use App\Mail\FormSetup;
+use App\Mail\AttachmentMail;
 
 class FormSetupPdfBuilder {
   private static $instance = null;
@@ -33,7 +33,7 @@ class FormSetupPdfBuilder {
    * @return FormSetupPdfBuilder
    */
   function addMain() {
-    $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents(public_path('/storage/images').'/puntualpayroll-logo.png'));
+    $imagenBase64 = "data:image/png;base64," . base64_encode(file_get_contents(public_path('/storage/images').'/logo.png'));
     // form setup pdf
     $pdf = new Dompdf;
     $pdf->set_paper('A4', 'portrait');
@@ -139,7 +139,7 @@ class FormSetupPdfBuilder {
     }
     Mail
       ::to($emails)
-      ->send(new FormSetup(request()->all(), $this->mergedPath));
+      ->send(new AttachmentMail(__('Form Setup'), $this->mergedPath));
     unlink($this->mergedPath);
     // reset
     $this->mergedPath = null;

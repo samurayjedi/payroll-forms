@@ -12,7 +12,7 @@ import {
   Typography,
 } from '@mui/material';
 import MemoryIcon from '@mui/icons-material/Memory';
-import { useErrors } from '@/hooks';
+import { useErrors, useSuperSubmitHandler } from '@/hooks';
 import AppLayout from '@/src/Layouts/AppLayout';
 import SectionCompanySetup from './SectionCompanySetup';
 import SectionPayrollSetup from './SectionPayrollSetup';
@@ -24,6 +24,7 @@ import * as styles from './styles';
 
 export default function Contact() {
   const { t } = useTranslation();
+  const onSubmit = useSuperSubmitHandler('form-setup');
   const [fuckErrors] = useErrors();
 
   const goToField = (fieldName: string) => () => {
@@ -46,7 +47,7 @@ export default function Contact() {
     <AppLayout>
       <Container maxWidth="lg">
         <Paper>
-          {Object.keys(fuckErrors).length && (
+          {Boolean(Object.keys(fuckErrors).length) && (
             <Alert severity="error" sx={{ mb: 2 }}>
               <AlertTitle>{t('Error')}</AlertTitle>
               {_.map(fuckErrors, (msg, field) => (
@@ -68,7 +69,7 @@ export default function Contact() {
               ...arrayMutators,
             }}
             subscription={{ submitting: true, pristine: true }}
-            onSubmit={() => console.log('holaaa')}
+            onSubmit={onSubmit}
             render={({ /** pristine, */ submitting, handleSubmit }) => (
               <form onSubmit={handleSubmit}>
                 <SectionCompanySetup submitting={submitting} />

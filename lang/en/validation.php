@@ -170,6 +170,8 @@ return [
     |
     */
 
+    'required_when' => 'The :attribute field is required when :others', //  when :others.
+    'required_if_in' => 'The :attribute field is required', //  when :array contains ":items".
     'custom' => [
         'attribute-name' => [
             'rule-name' => 'custom-message',

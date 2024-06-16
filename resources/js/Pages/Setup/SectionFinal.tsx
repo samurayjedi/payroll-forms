@@ -1,12 +1,12 @@
 import { useTranslation } from 'react-i18next';
 import { Field } from 'react-final-form';
 import { Box, Typography, TextField } from '@mui/material';
-import { useErrors } from '../../hooks';
-import InputFile from '../../lib/material/InputFile';
-import { Section } from '../../components/FormLayout';
+import { useErrors } from '@/hooks';
+import InputFile from '@/src/lib/piwi/core/InputFile';
+import Section from '@/src/Components/Section';
 import * as styles from './styles';
 
-export default function SectionFinal({ processing }: { processing: boolean }) {
+export default function SectionFinal({ submitting }: { submitting: boolean }) {
   const { t } = useTranslation();
   const [fuckErrors, onChangeDecorator] = useErrors();
 
@@ -24,7 +24,7 @@ export default function SectionFinal({ processing }: { processing: boolean }) {
               {...input}
               multiple
               accept="application/pdf, image/png, image/gif, image/jpeg"
-              disabled={processing}
+              disabled={submitting}
               onChange={onChangeDecorator(input.onChange)}
               error={Boolean(fuckErrors[input.name])}
               helperText={fuckErrors[input.name]}
@@ -47,7 +47,7 @@ export default function SectionFinal({ processing }: { processing: boolean }) {
             color="secondary"
             multiline
             rows={2}
-            disabled={processing}
+            disabled={submitting}
             onChange={onChangeDecorator(input.onChange)}
             error={Boolean(fuckErrors[input.name])}
             helperText={fuckErrors[input.name]}

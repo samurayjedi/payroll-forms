@@ -20,27 +20,31 @@ class RequiredWhenValidator {
       $inputName = array_shift($parameters);
       $cond = array_shift($parameters);
       $expectValue = array_shift($parameters);
-      switch ($cond) {
-        case '==':
-          switch ($logicGate) {
-            case 'none':
-              $isRequired = $inputs[$inputName] === $expectValue;
-              break;
-            case '||':
-              $isRequired = $isRequired || ($inputs[$inputName] === $expectValue);
-              if ($isRequired) { // only one is necesary to be true
-                return $isRequired;
-              }
-              break;
-            case '&&':
-              $isRequired = $isRequired && ($inputs[$inputName] === $expectValue);
-              break;
-            default:
-              throw new \RuntimeException("$logicGate no implemented!!!!!");
-          }
-          break;
-        default:
-          throw new \RuntimeException("$cond no implemented!!");
+      if (array_key_exists($inputName, $inputs)) {
+        switch ($cond) {
+          case '==':
+            switch ($logicGate) {
+              case 'none':
+                $isRequired = $inputs[$inputName] === $expectValue;
+                break;
+              case '||':
+                $isRequired = $isRequired || ($inputs[$inputName] === $expectValue);
+                if ($isRequired) { // only one is necesary to be true
+                  return $isRequired;
+                }
+                break;
+              case '&&':
+                $isRequired = $isRequired && ($inputs[$inputName] === $expectValue);
+                break;
+              default:
+                throw new \RuntimeException("$logicGate no implemented!!!!!");
+            }
+            break;
+          default:
+            throw new \RuntimeException("$cond no implemented!!");
+        }
+      } else {
+          $isRequired = false;
       }
       $logicGate = array_shift($parameters);
     }
@@ -68,6 +72,14 @@ class RequiredWhenValidator {
       $expectValue = str_replace(['_', '-'], ' ', array_shift($parameters));
       $others .= ($logicGate ? " $logicGate " : "")."$inputName $cond $expectValue";
       $logicGate = array_shift($parameters);
+      switch ($logicGate) {
+          case '&&':
+              $logicGate = __('and');
+              break;
+          case '||':
+              $logicGate = __('or');
+              break;
+      }
     }
 
     return str_replace(':others', $others, $message);

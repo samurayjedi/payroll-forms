@@ -7,17 +7,21 @@ import {
   Handshake as HandshakeIcon,
   Business as BusinessIcon,
   ContactPage as ContactPageIcon,
+  ChecklistRtl as ChecklistRtlIcon,
+  DynamicForm as DynamicFormIcon,
 } from '@mui/icons-material';
 import AppLayout from '@/src/Layouts/AppLayout';
 import Section from '@/src/Components/Section';
+import StatusAlert from '@/src/Components/StatusAlert';
 
-export default function Dashboard(/* { auth }: PageProps */) {
+export default function Dashboard() {
   const { t } = useTranslation();
 
   return (
     <AppLayout>
       <Container maxWidth="lg">
         <Paper>
+          <StatusAlert />
           <Section title={t('Docusign')} direction="row">
             <CardButton
               LinkComponent={Link}
@@ -52,6 +56,24 @@ export default function Dashboard(/* { auth }: PageProps */) {
               {t('W9')}
             </CardButton>
           </Section>
+          <Section title={t('Misc')} direction="row">
+            <CardButton
+              LinkComponent={Link}
+              href={route('form-setup')}
+              variant="contained"
+              startIcon={<ChecklistRtlIcon />}
+            >
+              {t('Form Setup')}
+            </CardButton>
+            <CardButton
+              LinkComponent={Link}
+              href={route('form-builder')}
+              variant="contained"
+              startIcon={<DynamicFormIcon />}
+            >
+              {t('Form Builder')}
+            </CardButton>
+          </Section>
         </Paper>
       </Container>
     </AppLayout>
@@ -61,6 +83,7 @@ export default function Dashboard(/* { auth }: PageProps */) {
 const Paper = styled(MUIPaper)(({ theme }) => ({
   padding: theme.spacing(2),
   display: 'flex',
+  flexDirection: 'column',
 }));
 
 const CardButton = styled(Button)(({ theme }) => ({

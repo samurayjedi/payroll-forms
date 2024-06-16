@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Events\DocumentCreated;
+use Illuminate\Support\Facades\Redirect;
 
 class ServiceAgreementController extends Controller {
     public function create() {
@@ -49,6 +50,6 @@ class ServiceAgreementController extends Controller {
 
     event(new DocumentCreated(request()));
     
-    return redirect('dashboard');
+    return redirect('dashboard')->with('status', __('I love wisadel!!!!!'));
   }
 }

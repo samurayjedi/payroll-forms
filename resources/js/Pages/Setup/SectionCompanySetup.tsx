@@ -79,9 +79,9 @@ export default function SectionCompanySetup({
                       variant="standard"
                       color="secondary"
                       disabled={submitting}
-                      onChange={onChangeDecorator(input.onChange)}
-                      error={Boolean(fuckErrors[input.name])}
-                      helperText={fuckErrors[input.name]}
+                      onChange={onChangeDecorator(superpollito.input.onChange)}
+                      error={Boolean(fuckErrors[superpollito.input.name])}
+                      helperText={fuckErrors[superpollito.input.name]}
                     />
                   )}
                 />

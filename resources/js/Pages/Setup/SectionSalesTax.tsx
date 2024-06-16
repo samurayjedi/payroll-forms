@@ -1,23 +1,23 @@
 import { useTranslation } from 'react-i18next';
 import { Field } from 'react-final-form';
 import { Box, Typography, TextField } from '@mui/material';
+import { useErrors } from '@/hooks';
+import Section from '@/src/Components/Section';
+import Options from '@/src/lib/piwi/core/Options';
+import InputFile from '@/src/lib/piwi/core/InputFile';
+import TextFieldPassword from '@/src/lib/piwi/core/TextFieldPassword';
+import TextFieldMasked from '@/src/lib/piwi/core/TextFieldMasked';
 import {
   yesNo,
   salexTaxManagementMethods,
   salesTaxPaymentMethod,
-} from '../../store/formSetup';
-import { useErrors } from '../../hooks';
-import { Section } from '../../components/FormLayout';
-import RadiosCollection from '../../lib/material/RadiosCollection';
-import InputFile from '../../lib/material/InputFile';
-import TextFieldPassword from '../../lib/material/TextFieldPassword';
-import TextFieldMasked from '../../lib/material/TextFieldMasked';
+} from './vars';
 import * as styles from './styles';
 
 export default function SectionSalesTax({
-  processing,
+  submitting,
 }: {
-  processing: boolean;
+  submitting: boolean;
 }) {
   const { t } = useTranslation();
   const [fuckErrors, onChangeDecorator] = useErrors();
@@ -29,14 +29,15 @@ export default function SectionSalesTax({
         subscription={{ value: true }}
         render={({ input }) => (
           <>
-            <RadiosCollection
+            <Options
               {...input}
+              type="radio"
               css={styles.radios}
               label={`1 - ${t(
                 'Do you sell products that require the payment of "Sales Tax"?',
               )}`}
-              disabled={processing}
-              radios={yesNo}
+              disabled={submitting}
+              options={yesNo}
               onChange={onChangeDecorator(input.onChange)}
               error={Boolean(fuckErrors[input.name])}
               helperText={fuckErrors[input.name]}
@@ -49,14 +50,15 @@ export default function SectionSalesTax({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`2 - ${t(
                           'Do you have an active sales tax license?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -76,7 +78,7 @@ export default function SectionSalesTax({
                                   {...superpollito.input}
                                   multiple
                                   accept="application/pdf, image/png, image/gif, image/jpeg"
-                                  disabled={processing}
+                                  disabled={submitting}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -96,12 +98,13 @@ export default function SectionSalesTax({
                             subscription={{ value: true }}
                             render={(superpollito) => (
                               <>
-                                <RadiosCollection
+                                <Options
                                   {...superpollito.input}
+                                  type="radio"
                                   css={styles.radios}
                                   label={t('Do you have access to it?')}
-                                  disabled={processing}
-                                  radios={yesNo}
+                                  disabled={submitting}
+                                  options={yesNo}
                                   onChange={onChangeDecorator(
                                     superpollito.input.onChange,
                                   )}
@@ -134,7 +137,7 @@ export default function SectionSalesTax({
                                             label={t('User/Email')}
                                             variant="standard"
                                             color="secondary"
-                                            disabled={processing}
+                                            disabled={submitting}
                                             onChange={onChangeDecorator(
                                               megapollito.input.onChange,
                                             )}
@@ -159,7 +162,7 @@ export default function SectionSalesTax({
                                             label={t('Password')}
                                             variant="standard"
                                             color="secondary"
-                                            disabled={processing}
+                                            disabled={submitting}
                                             onChange={onChangeDecorator(
                                               megapollito.input.onChange,
                                             )}
@@ -191,14 +194,15 @@ export default function SectionSalesTax({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`3 - ${t(
                           'Did you recopile the previous reports?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -217,7 +221,7 @@ export default function SectionSalesTax({
                                 {...superpollito.input}
                                 multiple
                                 accept="application/pdf, image/png, image/gif, image/jpeg"
-                                disabled={processing}
+                                disabled={submitting}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
@@ -239,14 +243,15 @@ export default function SectionSalesTax({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`4 - ${t(
                           'Is the sales tax payment up to date?',
                         )}`}
-                        disabled={processing}
-                        radios={yesNo}
+                        disabled={submitting}
+                        options={yesNo}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -268,7 +273,7 @@ export default function SectionSalesTax({
                                 color="secondary"
                                 multiline
                                 rows={2}
-                                disabled={processing}
+                                disabled={submitting}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
@@ -290,14 +295,15 @@ export default function SectionSalesTax({
                   subscription={{ value: true }}
                   render={(pollito) => (
                     <>
-                      <RadiosCollection
+                      <Options
                         {...pollito.input}
+                        type="radio"
                         css={styles.radios}
                         label={`5 - ${t(
                           'How would you prefer us to handle sales tax?',
                         )}`}
-                        disabled={processing}
-                        radios={salexTaxManagementMethods}
+                        disabled={submitting}
+                        options={salexTaxManagementMethods}
                         onChange={onChangeDecorator(pollito.input.onChange)}
                         error={Boolean(fuckErrors[pollito.input.name])}
                         helperText={fuckErrors[pollito.input.name]}
@@ -322,7 +328,7 @@ export default function SectionSalesTax({
                                 }}
                                 variant="standard"
                                 color="secondary"
-                                disabled={processing}
+                                disabled={submitting}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
@@ -338,12 +344,13 @@ export default function SectionSalesTax({
                             name="salex_tax_payment_method"
                             subscription={{ value: true }}
                             render={(superpollito) => (
-                              <RadiosCollection
+                              <Options
                                 {...superpollito.input}
+                                type="radio"
                                 css={styles.radios}
                                 label={t('How do you want to pay?')}
-                                disabled={processing}
-                                radios={salesTaxPaymentMethod}
+                                disabled={submitting}
+                                options={salesTaxPaymentMethod}
                                 onChange={onChangeDecorator(
                                   superpollito.input.onChange,
                                 )}
