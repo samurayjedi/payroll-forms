@@ -8,7 +8,6 @@ import {
   Business as BusinessIcon,
   ContactPage as ContactPageIcon,
   ChecklistRtl as ChecklistRtlIcon,
-  DynamicForm as DynamicFormIcon,
 } from '@mui/icons-material';
 import AppLayout from '@/src/Layouts/AppLayout';
 import Section from '@/src/Components/Section';
@@ -64,14 +63,6 @@ export default function Dashboard() {
               startIcon={<ChecklistRtlIcon />}
             >
               {t('Form Setup')}
-            </CardButton>
-            <CardButton
-              LinkComponent={Link}
-              href={route('form-builder')}
-              variant="contained"
-              startIcon={<DynamicFormIcon />}
-            >
-              {t('Form Builder')}
             </CardButton>
           </Section>
         </Paper>

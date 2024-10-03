@@ -6,7 +6,6 @@ use Inertia\Inertia;
 use App\Http\Controllers\LocaleController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\FormSetupController;
-use App\Http\Controllers\FormBuilder;
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -33,11 +32,6 @@ Route::middleware(['auth'])->group(function () {
         FormSetupController::class,
         'process',
     ])->name('form-setup.process');
-    /** Form Builder */
-    Route::get('/form-builder', [
-        FormBuilder::class,
-        'create',
-    ])->name('form-builder');
 });
 
 Route::get('/locales/{language}/translation.json', [LocaleController::class, 'handle']);
