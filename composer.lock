@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "06be03dcdffdb8e7791401aaee212460",
+    "content-hash": "9ead9d80904fc9e6f928c85aff4cc570",
     "packages": [
         {
             "name": "brick/math",
@@ -3819,11 +3819,17 @@
         },
         {
             "name": "samurayjedi/laravel-docusign",
-            "version": "dev-main",
+            "version": "v1.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/samurayjedi/laravel-docusign.git",
+                "reference": "b937846d804c882274207767f8134a3b1d85f222"
+            },
             "dist": {
-                "type": "path",
-                "url": "packages/samurayjedi/laravel-docusign",
-                "reference": "f6cd1828f8b84d251946c8612f5793d10dcd4bf8"
+                "type": "zip",
+                "url": "https://api.github.com/repos/samurayjedi/laravel-docusign/zipball/b937846d804c882274207767f8134a3b1d85f222",
+                "reference": "b937846d804c882274207767f8134a3b1d85f222",
+                "shasum": ""
             },
             "require": {
                 "docusign/esign-client": "^6.19",
@@ -3846,8 +3852,9 @@
                     "Samurayjedi\\LaravelDocusign\\": "src/"
                 }
             },
+            "notification-url": "https://packagist.org/downloads/",
             "license": [
-                "gpl"
+                "GPL-3.0-or-later"
             ],
             "authors": [
                 {
@@ -3855,9 +3862,11 @@
                 }
             ],
             "description": "Docusign laravel integration as middleware.",
-            "transport-options": {
-                "relative": true
-            }
+            "support": {
+                "issues": "https://github.com/samurayjedi/laravel-docusign/issues",
+                "source": "https://github.com/samurayjedi/laravel-docusign/tree/v1.0"
+            },
+            "time": "2024-10-03T23:24:12+00:00"
         },
         {
             "name": "setasign/fpdf",
@@ -9332,7 +9341,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "samurayjedi/laravel-docusign": 20,
         "clegginabox/pdf-merger": 20
     },
     "prefer-stable": true,
