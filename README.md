@@ -25,7 +25,7 @@ Service Agreement:
 
 </div>
 
-Once it is sent, a email arrives in the inbox of the 'Company Email', when the owner sign the user, arrives other email to the "Customer Email", when all sign the document, each one receives one email with the signed document and cabon copies are send to the emails configured in the env variable "ADMIN_EMAILS".
+Once it is sent, a email arrives in the inbox of the 'Client Email', when he sign the document, arrives other email to the "Sales Rep Email", when all sign, each one receives one email with the signed document and cabon copies are send to the emails configured in the env variable "ADMIN_EMAILS".
 
 <div align="center">
 
