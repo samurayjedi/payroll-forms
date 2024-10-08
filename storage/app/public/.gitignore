@@ -5,4 +5,5 @@
 !/documents/
 !/documents/*
 !/documents/*/*
+!/tmp/
 !/tmp/.gitkeep
