@@ -17,6 +17,22 @@ Its done, create your user in the app and start to test the forms.
 
 ## Examples
 
+Service Agreement:
+
+<div align="center">
+
+<img src="https://github.com/samurayjedi/payroll-forms/blob/main/readme/form.png" alt="App & Keys">
+
+</div>
+
+Once it is sent, a email arrives in the inbox of the 'Company Email', when the owner sign the user, arrives other email to the "Customer Email", when all sign the document, each one receives one email with the signed document and cabon copies are send to the emails configured in the env variable "ADMIN_EMAILS".
+
+<div align="center">
+
+<img src="https://github.com/samurayjedi/payroll-forms/blob/main/readme/doc.png" alt="App & Keys">
+
+</div>
+
 
 
 
